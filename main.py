@@ -22,9 +22,9 @@ def main():
 
         print("\nkeyword_search:")
         print("  tfidf:")
-        print_results(docs, engines["tfidf"].search(query, TOP_K), indent=4)
+        print_results(docs, engines["tfidf"].search(query, TOP_K), indent=4, query=query)
         print("  bm25:")
-        print_results(docs, engines["bm25"].search(query, TOP_K), indent=4)
+        print_results(docs, engines["bm25"].search(query, TOP_K), indent=4, query=query)
 
         print("\nsemantic_search:")
         print_results(docs, engines["semantic"].search(query, TOP_K), indent=2)

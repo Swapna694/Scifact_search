@@ -56,7 +56,7 @@ def main():
                 totals[key]["mrr"] += reciprocal_rank(ranked_ids, relevant)
                 if group == "keyword_search":
                     print(f"  {label}:")
-                    print_results(docs, results[:TOP_K], relevant, indent=4)
+                    print_results(docs, results[:TOP_K], relevant, indent=4, query=q["text"])
                 else:
                     print_results(docs, results[:TOP_K], relevant, indent=2)
 
