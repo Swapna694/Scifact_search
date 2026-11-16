@@ -2,18 +2,13 @@
 
 Command-line search over the SciFact dataset using:
 - Keyword search: TF-IDF and BM25 (implemented from scratch)
-- Semantic search: sentence embeddings + cosine similarity
+- Semantic search: sentence embeddings + cosine similarity, stored in Qdrant
+- Reranking: cross-encoder re-scores the top BM25 and semantic results
 
 ## Setup
-
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-
+(venv and install commands)
 
 ## Run
+(main.py and run_queries.py commands)
 
-python main.py                    # interactive search
-python run_queries.py --n 20      # compare all methods on test queries
-
-The dataset downloads automatically on the first run.
+The dataset and models download automatically on the first run.
