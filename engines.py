@@ -1,6 +1,7 @@
 """Builds all three search engines on the same corpus."""
 from bm25 import BM25Search
 from preprocessing import tokenize
+from reranker import RerankedSearch
 from semantic_search import SemanticSearch
 from tfidf import TFIDFSearch
 
@@ -16,4 +17,7 @@ def build_engines(docs):
     print("Building semantic index...")
     semantic = SemanticSearch().fit(texts)
 
-    return {"tfidf": tfidf, "bm25": bm25, "semantic": semantic}
+    print("Building reranker...")
+    reranked = RerankedSearch(docs, bm25, semantic)
+
+    return {"tfidf": tfidf, "bm25": bm25, "semantic": semantic, "reranked": reranked}

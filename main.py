@@ -1,5 +1,5 @@
 """Interactive CLI chatbot: keyword search (TF-IDF + BM25) and semantic search."""
-from config import TOP_K
+from config import RERANK_TOP_N, TOP_K
 from data_loader import load_corpus
 from display import print_results
 from engines import build_engines
@@ -28,6 +28,9 @@ def main():
 
         print("\nsemantic_search:")
         print_results(docs, engines["semantic"].search(query, TOP_K), indent=2)
+
+        print("\nreranked_search (BM25 + semantic candidates, cross-encoder):")
+        print_results(docs, engines["reranked"].search(query, RERANK_TOP_N), indent=2)
         print()
 
 

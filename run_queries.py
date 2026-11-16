@@ -16,6 +16,7 @@ from engines import build_engines
 GROUPS = [
     ("keyword_search", [("tfidf", "tfidf"), ("bm25", "bm25")]),
     ("semantic_search", [("semantic", "semantic")]),
+    ("reranked_search", [("reranked", "reranked")]),
 ]
 METHODS = [(k, l) for _, members in GROUPS for k, l in members]
 
