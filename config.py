@@ -1,5 +1,9 @@
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()  # reads QDRANT_URL / QDRANT_API_KEY from a .env file if present
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 CACHE_DIR = os.path.join(BASE_DIR, "cache")
@@ -22,3 +26,7 @@ RERANK_TOP_N = 3   # how many reranked results to show
 # Qdrant vector database (local mode: stored in a folder, no server needed)
 QDRANT_PATH = os.path.join(BASE_DIR, "qdrant_db")
 QDRANT_COLLECTION = "scifact"
+
+# Qdrant Cloud: if QDRANT_URL is set, the cluster is used instead of the local folder
+QDRANT_URL = os.environ.get("QDRANT_URL")
+QDRANT_API_KEY = os.environ.get("QDRANT_API_KEY")
