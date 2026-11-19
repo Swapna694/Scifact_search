@@ -15,7 +15,7 @@ def build_engines(docs):
     print("Building BM25 index...")
     bm25 = BM25Search().fit(tokens)
     print("Building semantic index...")
-    semantic = SemanticSearch().fit(texts)
+    semantic = SemanticSearch().fit(texts, docs)
 
     print("Building reranker...")
     reranked = RerankedSearch(docs, bm25, semantic)

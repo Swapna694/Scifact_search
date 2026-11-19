@@ -34,7 +34,8 @@ def _get_client():
 
 
 class SemanticSearch:
-    def fit(self, texts):
+    # data embedding
+    def fit(self, texts, docs=None):
         self.model = SentenceTransformer(MODEL_NAME)
         self.client = _get_client()
         name = QDRANT_COLLECTION
@@ -62,10 +63,18 @@ class SemanticSearch:
 
         print("Encoding corpus and storing vectors in Qdrant...")
         for start in range(start_from, total, BATCH):
-            chunk = texts[start:start + BATCH]
+            chunk = texts[start:start + BATCH]  ## embedding
             vectors = self.model.encode(chunk, show_progress_bar=False)
             points = [
-                PointStruct(id=start + j, vector=v.tolist())
+                PointStruct(
+                    id=start + j,
+                    vector=v.tolist(),
+                    payload={                             ###payload
+                        "id": docs[start + j]["id"],
+                        "title": docs[start + j]["title"],
+                        "text": docs[start + j]["text"],
+                    },
+                )
                 for j, v in enumerate(vectors)
             ]
             self.client.upsert(collection_name=name, points=points)
@@ -73,7 +82,8 @@ class SemanticSearch:
         return self
 
     def search(self, query, k=3):
-        q_vec = self.model.encode([query])[0].tolist()
+        # querry embedding
+        q_vec = self.model.encode([query])[0].tolist() ### embedding
         res = self.client.query_points(
             collection_name=QDRANT_COLLECTION, query=q_vec, limit=k
         )
