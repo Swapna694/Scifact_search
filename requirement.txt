@@ -3,3 +3,4 @@ sentence-transformers
 qdrant-client
 streamlit
 python-dotenv
+google-genai
