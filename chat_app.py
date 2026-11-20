@@ -5,7 +5,7 @@ from data_loader import load_corpus
 from engines import build_engines
 from rag import RAGChatbot
 
-st.set_page_config(page_title="SciFact RAG Chat")
+st.set_page_config(page_title="SciScout")
 
 
 @st.cache_resource(show_spinner="Loading data and building indexes (the first run can take a few minutes)...")
@@ -20,7 +20,7 @@ if "bot" not in st.session_state:
     st.session_state.bot = RAGChatbot(docs, engines)
     st.session_state.messages = []
 
-st.title("SciFact RAG Chat")
+st.title("SciScout")
 st.caption("Answers are written by an LLM using only the retrieved papers. Always check the sources.")
 
 if st.sidebar.button("New chat"):
@@ -56,6 +56,8 @@ if question:
                 st.error(f"Error: {e}")
                 st.stop()
         st.markdown(r["answer"])
+        t = r["timings"]
+        st.caption(f"Time: rewrite {t['rewrite']:.1f}s | search + rerank {t['search']:.1f}s | LLM answer {t['llm_answer']:.1f}s")
         show_sources(r["sources"])
 
     st.session_state.messages.append(

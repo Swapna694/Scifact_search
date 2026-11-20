@@ -23,7 +23,7 @@ class RAGChatbot:
         self.top_n = top_n
         self.history = []          # list of (question, answer)
 
-    def reset(self):
+    def reset(self):            #empties the history, which is  “New chat” and the reset command do.
         self.history = []
 
     def _standalone(self, question):
@@ -34,7 +34,7 @@ class RAGChatbot:
         prompt = f"Conversation so far:\n{convo}\n\nNew message: {question}\n\nStandalone question:"
         return ask_llm(prompt, system=REWRITE_SYSTEM, temperature=0) or question
 
-    def _format_sources(self, results):
+    def _format_sources(self, results):     #turns the retrieved papers into text for the prompt
         blocks = []
         for i, _ in results:
             d = self.docs[i]
@@ -43,13 +43,14 @@ class RAGChatbot:
 
     def ask(self, question):
         t0 = time.time()
-        standalone = self._standalone(question)
+        standalone = self._standalone(question)  #_standalone rewrites the question if there is history.
         t1 = time.time()
+        #runs your full retrieval pipeline (BM25 and Qdrant candidates, re-scored by the cross-encoder) and keeps the top 5.
         results = self.engines["reranked"].search(standalone, self.top_n)
         t2 = time.time()
 
         prompt = f"Sources:\n\n{self._format_sources(results)}\n\nQuestion: {standalone}"
-        answer = ask_llm(prompt, system=SYSTEM_PROMPT) or (
+        answer = ask_llm(prompt, system=SYSTEM_PROMPT) or (                    # gets the answer
             "Sorry, I could not generate an answer. Please try again."
         )
         t3 = time.time()
@@ -61,3 +62,9 @@ class RAGChatbot:
             "sources": [(self.docs[i], score) for i, score in results],
             "timings": {"rewrite": t1 - t0, "search": t2 - t1, "llm_answer": t3 - t2},
         }
+'''
+answer	---------------->The LLM’s text
+standalone	------------->The question actually searched (shown as (searched for: ...) in the terminal)
+sources	------------------>The papers used, as (document, score) pairs, shown under the answer
+timings	------------------>Seconds spent on rewrite, search and rerank, and the LLM answer
+'''

@@ -35,4 +35,6 @@ QDRANT_API_KEY = os.environ.get("QDRANT_API_KEY")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
 RAG_TOP_N = 5
-MAX_ABSTRACT_CHARS = 1500
+MAX_ABSTRACT_CHARS = 1000
+
+GEMINI_FALLBACK_MODEL = os.environ.get("GEMINI_FALLBACK_MODEL", "gemini-2.5-flash")
